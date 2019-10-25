@@ -1,7 +1,6 @@
 import React, { Component, RefObject } from "react";
-import { PDFRenderParams, TextContent, PDFRenderTask } from "pdfjs-dist";
+import { PDFRenderParams, PDFRenderTask } from "pdfjs-dist";
 import "./paper.css";
-const pdfjs = require("pdfjs-dist");
 
 export default class Paper extends Component<PaperProps, PaperState> {
   canvasRef: RefObject<HTMLCanvasElement> = React.createRef();
@@ -14,12 +13,11 @@ export default class Paper extends Component<PaperProps, PaperState> {
 
   componentDidMount() {
     this.setState({ scale: this.props.scale });
-    // this.renderPage();
-    // console.log(this.props.documentLoadRef);
+    this.renderPage();
   }
 
-  componentDidUpdate(prevProps: PaperProps) {
-    if (this.props.documentLoadRef) {
+  componentDidUpdate(prevProps: PaperProps, prevState: PaperState) {
+    if (this.props.documentLoadRef !== prevProps.documentLoadRef) {
       this.renderPage();
     }
   }
@@ -27,7 +25,7 @@ export default class Paper extends Component<PaperProps, PaperState> {
   renderPage = async () => {
     const loadingTask = this.props.documentLoadRef;
 
-    const pdf = await loadingTask.promise;
+    const pdf = await loadingTask;
     const page = await pdf.getPage(this.props.page);
     const viewport = page.getViewport({ scale: this.state.scale });
 
@@ -50,11 +48,11 @@ export default class Paper extends Component<PaperProps, PaperState> {
         };
         const renderTask: PDFRenderTask = page.render(renderContext);
         await renderTask.promise;
-        const textContent: TextContent = await page.getTextContent();
+        // const textContent: TextContent = await page.getTextContent();
         // empty layer text
-        const textLayer: HTMLDivElement | null = document.querySelector(
-          "#text-layer"
-        );
+        // const textLayer: HTMLDivElement | null = document.querySelector(
+        //   "#text-layer"
+        // );
         // if (textLayer) {
         //   textLayer.innerHTML = "";
         //   const markI = new mark(textLayer);
@@ -62,12 +60,12 @@ export default class Paper extends Component<PaperProps, PaperState> {
         //     acrossElements: true
         //   });
         // }
-        pdfjs.renderTextLayer({
-          textContent: textContent,
-          container: document.querySelector("#text-layer"),
-          viewport: viewport,
-          textDivs: []
-        });
+        // pdfjs.renderTextLayer({
+        //   textContent: textContent,
+        //   container: document.querySelector("#text-layer"),
+        //   viewport: viewport,
+        //   textDivs: []
+        // });
       }
     }
   };
@@ -75,7 +73,14 @@ export default class Paper extends Component<PaperProps, PaperState> {
   render() {
     return (
       <div>
-        <div className="pdf-viewer-paper-container">
+        <div
+          className="pdf-viewer-paper-container"
+          style={{
+            width: this.state.canvasWidth,
+            height: this.state.canvasHeight,
+            margin: "auto"
+          }}
+        >
           <canvas ref={this.canvasRef}></canvas>
         </div>
       </div>
