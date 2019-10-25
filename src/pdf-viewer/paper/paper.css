@@ -2,3 +2,45 @@
   border: 1px solid #d3d3d3;
   margin: 0.85rem 0;
 }
+
+.pdf-viewer-paper-container {
+  position: relative;
+  border: 1px solid #d3d3d3;
+  width: 100%;
+  max-width: 720px;
+}
+
+.pdf-viewer-paper-container .textWrapper {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+}
+
+.pdf-viewer-paper-container #text-layer {
+  height: 100%;
+  overflow: hidden;
+  opacity: 0.2;
+  line-height: 1;
+}
+
+.pdf-viewer-paper-container #text-layer > span {
+  color: transparent;
+  position: absolute;
+  white-space: pre;
+  cursor: text;
+  transform-origin: 0% 0%;
+}
+
+.pdf-viewer-paper-container #text-layer ::-moz-selection {
+  color: yellow;
+  background: yellow;
+}
+
+.pdf-viewer-paper-container #text-layer ::selection {
+  color: yellow;
+  background: yellow;
+}
