@@ -9,45 +9,39 @@ pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorker;
 export default class PDFViewer extends Component<PDFViewerProps> {
   canvasRef: RefObject<HTMLCanvasElement> = React.createRef();
   src: string = this.props.src;
-  scale: number = 1.7;
+  pages: number = 1;
   state = {
-    page: 1,
-    paperWidth: 0,
-    paperHeight: 0
+    scale: 1.7
   };
   PDFdocumentRef: any;
 
   fetchPdf = async () => {
     if (!this.PDFdocumentRef) {
-      this.PDFdocumentRef = pdfjs.getDocument(this.src);
+      this.PDFdocumentRef = pdfjs.getDocument(this.src).promise;
+      const { numPages } = await this.PDFdocumentRef;
+      this.pages = numPages;
+      this.setState({ pages: numPages });
     }
     return this.PDFdocumentRef;
   };
 
-  render() {
-    return (
-      <div className="pdf-bg">
+  loadPages = () => {
+    let pages = [];
+    for (let i = 1; i <= this.pages; i++) {
+      pages.push(
         <Paper
+          key={"page#" + i}
           documentLoadRef={this.fetchPdf()}
-          page={1}
-          scale={this.scale}
+          page={i}
+          scale={this.state.scale}
         ></Paper>
-        <div>
-          <button
-            onClick={() =>
-              this.setState({
-                page: this.state.page < 2 ? 1 : this.state.page - 1
-              })
-            }
-          >
-            Prev
-          </button>
-          <button onClick={() => this.setState({ page: this.state.page + 1 })}>
-            NEXT
-          </button>
-        </div>
-      </div>
-    );
+      );
+    }
+    return pages;
+  };
+
+  render() {
+    return <div className="pdf-bg">{this.loadPages().map(page => page)}</div>;
   }
 }
 

@@ -8,23 +8,19 @@ export default class Paper extends Component<PaperProps, PaperState> {
   state: PaperState = {
     canvasWidth: 0,
     canvasHeight: 0,
-    scale: 1
+    scale: 1,
+    rendered: false
   };
 
   componentDidMount() {
     this.setState({ scale: this.props.scale });
-    this.renderPage();
-  }
-
-  componentDidUpdate(prevProps: PaperProps, prevState: PaperState) {
-    if (this.props.documentLoadRef !== prevProps.documentLoadRef) {
+    if (this.props.documentLoadRef) {
       this.renderPage();
     }
   }
 
   renderPage = async () => {
     const loadingTask = this.props.documentLoadRef;
-
     const pdf = await loadingTask;
     const page = await pdf.getPage(this.props.page);
     const viewport = page.getViewport({ scale: this.state.scale });
@@ -47,7 +43,8 @@ export default class Paper extends Component<PaperProps, PaperState> {
           viewport: viewport
         };
         const renderTask: PDFRenderTask = page.render(renderContext);
-        await renderTask.promise;
+        this.setState({ rendered: true });
+        // await renderTask.promise;
         // const textContent: TextContent = await page.getTextContent();
         // empty layer text
         // const textLayer: HTMLDivElement | null = document.querySelector(
@@ -98,4 +95,5 @@ interface PaperState {
   canvasWidth: number;
   canvasHeight: number;
   scale: number;
+  rendered: boolean;
 }
