@@ -74,8 +74,7 @@ export default class Paper extends Component<PaperProps, PaperState> {
           className="pdf-viewer-paper-container"
           style={{
             width: this.state.canvasWidth,
-            height: this.state.canvasHeight,
-            margin: "auto"
+            height: this.state.canvasHeight
           }}
         >
           <canvas ref={this.canvasRef}></canvas>

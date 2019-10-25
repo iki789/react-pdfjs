@@ -1,13 +1,8 @@
 .pdf-viewer-paper-container {
-  border: 1px solid #d3d3d3;
-  margin: 0.85rem 0;
-}
-
-.pdf-viewer-paper-container {
   position: relative;
-  border: 1px solid #d3d3d3;
-  width: 100%;
-  max-width: 720px;
+  border: 3px solid #d3d3d3;
+  max-width: 100%;
+  margin: 0 auto 1rem;
 }
 
 .pdf-viewer-paper-container .textWrapper {
