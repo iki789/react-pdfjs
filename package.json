@@ -4,11 +4,18 @@
   "private": true,
   "dependencies": {
     "@types/jest": "24.0.19",
+    "@types/mark.js": "^8.11.4",
     "@types/node": "12.11.6",
+    "@types/pdfjs-dist": "^2.1.2",
     "@types/react": "16.9.9",
     "@types/react-dom": "16.9.2",
+    "@types/react-pdf": "^4.0.3",
+    "core-js": "^2.5.7",
+    "mark.js": "^8.11.1",
+    "pdfjs-dist": "^2.2.228",
     "react": "^16.11.0",
     "react-dom": "^16.11.0",
+    "react-pdf": "^4.1.0",
     "react-scripts": "3.2.0",
     "typescript": "3.6.4"
   },
