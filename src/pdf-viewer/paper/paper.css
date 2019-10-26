@@ -16,14 +16,14 @@
   bottom: 0;
 }
 
-.pdf-viewer-paper-container #text-layer {
+.pdf-viewer-paper-container .text-layer {
   height: 100%;
   overflow: hidden;
   opacity: 0.2;
   line-height: 1;
 }
 
-.pdf-viewer-paper-container #text-layer > span {
+.pdf-viewer-paper-container .text-layer > span {
   color: transparent;
   position: absolute;
   white-space: pre;
@@ -31,12 +31,12 @@
   transform-origin: 0% 0%;
 }
 
-.pdf-viewer-paper-container #text-layer ::-moz-selection {
+.pdf-viewer-paper-container .text-layer ::-moz-selection {
   color: yellow;
   background: yellow;
 }
 
-.pdf-viewer-paper-container #text-layer ::selection {
+.pdf-viewer-paper-container .text-layer ::selection {
   color: yellow;
   background: yellow;
 }
