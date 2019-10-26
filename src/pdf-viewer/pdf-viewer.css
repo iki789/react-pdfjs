@@ -1,8 +1,8 @@
 .pdf-bg {
+  padding: 2rem 0;
   background-color: darkslategray;
   width: 100%;
   min-height: 100vh;
-  padding: 1rem;
   margin: auto;
 }
 
