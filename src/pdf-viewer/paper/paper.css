@@ -37,11 +37,11 @@
 
 .pdf-viewer-paper-container .text-layer {
   overflow: hidden;
-  opacity: 0.2;
   line-height: 1;
 }
 
 .pdf-viewer-paper-container .text-layer > span {
+  opacity: 1;
   color: transparent;
   position: absolute;
   white-space: pre;
@@ -50,11 +50,12 @@
 }
 
 .pdf-viewer-paper-container .text-layer ::-moz-selection {
-  color: yellow;
-  background: yellow;
+  color: transparent;
+  background: rgba(0, 0, 0, 0.1);
+  opacity: 0.2;
 }
 
 .pdf-viewer-paper-container .text-layer ::selection {
-  color: yellow;
-  background: yellow;
+  color: transparent;
+  background: rgba(0, 0, 0, 0.1);
 }
