@@ -11,7 +11,7 @@ export default class PDFViewer extends Component<PDFViewerProps> {
   src: string = this.props.src;
   pages: number = 1;
   state = {
-    scale: 1.7
+    scale: 1
   };
   PDFdocumentRef: any;
 
