@@ -1,10 +1,11 @@
 import React, { Component, RefObject } from "react";
-import { PDFRenderParams, PDFRenderTask } from "pdfjs-dist";
+import { PDFRenderParams, PDFRenderTask, TextContent } from "pdfjs-dist";
 import "./paper.css";
+const pdfjs = require("pdfjs-dist");
 
 export default class Paper extends Component<PaperProps, PaperState> {
   canvasRef: RefObject<HTMLCanvasElement> = React.createRef();
-
+  textLayerRef: RefObject<HTMLDivElement> = React.createRef();
   state: PaperState = {
     canvasWidth: 0,
     canvasHeight: 0,
@@ -44,8 +45,8 @@ export default class Paper extends Component<PaperProps, PaperState> {
         };
         const renderTask: PDFRenderTask = page.render(renderContext);
         this.setState({ rendered: true });
-        // await renderTask.promise;
-        // const textContent: TextContent = await page.getTextContent();
+        await renderTask.promise;
+        const textContent: TextContent = await page.getTextContent();
         // empty layer text
         // const textLayer: HTMLDivElement | null = document.querySelector(
         //   "#text-layer"
@@ -57,12 +58,12 @@ export default class Paper extends Component<PaperProps, PaperState> {
         //     acrossElements: true
         //   });
         // }
-        // pdfjs.renderTextLayer({
-        //   textContent: textContent,
-        //   container: document.querySelector("#text-layer"),
-        //   viewport: viewport,
-        //   textDivs: []
-        // });
+        pdfjs.renderTextLayer({
+          textContent: textContent,
+          container: this.textLayerRef.current,
+          viewport: viewport,
+          textDivs: []
+        });
       }
     }
   };
@@ -78,6 +79,7 @@ export default class Paper extends Component<PaperProps, PaperState> {
           }}
         >
           <canvas ref={this.canvasRef}></canvas>
+          <div className="text-layer" ref={this.textLayerRef}></div>
         </div>
       </div>
     );
