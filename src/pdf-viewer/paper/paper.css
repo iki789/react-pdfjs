@@ -1,9 +1,28 @@
 .pdf-viewer-paper-container {
+  width: 576px;
   position: relative;
   border: 2px solid #3d3d3d;
   max-width: 100%;
   margin: 0 auto 1rem;
   border-radius: 2px;
+}
+
+@media screen and (min-width: 768px) {
+  .pdf-viewer-paper-container {
+    width: 768px;
+  }
+}
+
+@media screen and (min-width: 992px) {
+  .pdf-viewer-paper-container {
+    width: 992px;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  .pdf-viewer-paper-container {
+    width: 1200px;
+  }
 }
 
 .pdf-viewer-paper-container .textWrapper {
