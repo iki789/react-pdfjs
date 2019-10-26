@@ -1,5 +1,6 @@
 import React, { Component, RefObject } from "react";
 import { PDFRenderParams, PDFRenderTask, TextContent } from "pdfjs-dist";
+// import mark from "mark.js";
 import "./paper.css";
 const pdfjs = require("pdfjs-dist");
 
@@ -30,7 +31,7 @@ export default class Paper extends Component<PaperProps, PaperState> {
       this.setState({
         scale:
           (this.container.current.clientWidth / viewport.width) *
-          (this.props.scale / 1.8)
+          (this.props.scale / 1.9)
       });
       viewport = page.getViewport({
         scale: this.state.scale
@@ -51,27 +52,25 @@ export default class Paper extends Component<PaperProps, PaperState> {
           canvasContext: context,
           viewport: viewport
         };
-        console.log(canvas.width, canvas.height);
         const renderTask: PDFRenderTask = page.render(renderContext);
         this.setState({ rendered: true });
         await renderTask.promise;
         const textContent: TextContent = await page.getTextContent();
-        // empty layer text
-        // const textLayer: HTMLDivElement | null = document.querySelector(
-        //   "#text-layer"
-        // );
-        // if (textLayer) {
-        //   textLayer.innerHTML = "";
-        //   const markI = new mark(textLayer);
-        //   markI.mark("Logitech", {
-        //     acrossElements: true
-        //   });
-        // }
-        pdfjs.renderTextLayer({
+
+        // remove extra spacing
+        textContent.items.map(item => {
+          item.str = item.str.replace(/\t/g, " ");
+        });
+
+        const textRender = await pdfjs.renderTextLayer({
           textContent: textContent,
           container: this.textLayerRef.current,
           viewport: viewport,
           textDivs: []
+        });
+
+        textRender.promise.then(() => {
+          document.dispatchEvent(new CustomEvent("textlayerrendered"));
         });
       }
     }
