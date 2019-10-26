@@ -78,7 +78,7 @@ export default class Paper extends Component<PaperProps, PaperState> {
             height: this.state.canvasHeight
           }}
         >
-          <canvas ref={this.canvasRef}></canvas>
+          <canvas className="paper-canvas" ref={this.canvasRef}></canvas>
           <div className="text-layer" ref={this.textLayerRef}></div>
         </div>
       </div>

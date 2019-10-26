@@ -17,7 +17,6 @@
 }
 
 .pdf-viewer-paper-container .text-layer {
-  height: 100%;
   overflow: hidden;
   opacity: 0.2;
   line-height: 1;
