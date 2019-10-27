@@ -19,12 +19,16 @@ export default class PDFViewer extends Component<
   keywords: string = this.props.keywords;
   PDFdocumentRef: any;
   fullyRenderedPages: number = 0;
-  matchedNodes: HTMLCollection | [] = [];
-  state = {
-    scale: 1,
-    pages: 0,
-    highlightedIndex: 0
-  };
+
+  constructor(props: PDFViewerProps) {
+    super(props);
+    this.state = {
+      scale: 1,
+      pages: 0,
+      highlightedIndex: 0,
+      matchedNodes: []
+    };
+  }
 
   fetchPdf = async () => {
     if (!this.PDFdocumentRef) {
@@ -73,19 +77,36 @@ export default class PDFViewer extends Component<
 
   getMatchedNodes = () => {
     if (this.container.current) {
-      this.matchedNodes = this.container.current.getElementsByTagName("mark");
-      this.setState({ highlightedIndex: 0 });
-      this.scrollToMatchedIndex(this.state.highlightedIndex);
+      this.setState({
+        highlightedIndex: 0,
+        matchedNodes: this.container.current.getElementsByTagName("mark")
+      });
+      this.scrollToMatchedIndex(this.state.highlightedIndex, "next");
     }
   };
 
-  scrollToMatchedIndex = (matchedNodesIndex: number) => {
-    if (this.matchedNodes) {
-      const node = this.matchedNodes[matchedNodesIndex];
+  scrollToMatchedIndex = (
+    matchedNodesIndex: number,
+    action: "next" | "prev"
+  ) => {
+    const { matchedNodes } = this.state;
+    if (this.state.matchedNodes[matchedNodesIndex]) {
+      const node: Element = matchedNodes[matchedNodesIndex];
       const offsetTop = 50;
       const position = node.getBoundingClientRect().top - offsetTop;
-      node.classList.add("highlight");
       window.scrollTo({ top: position, left: 0 });
+      node.classList.add("highlight");
+      if (action === "next") {
+        if (matchedNodes[matchedNodesIndex - 1]) {
+          matchedNodes[matchedNodesIndex - 1].classList.remove("highlight");
+        }
+      }
+      if (action === "prev") {
+        if (matchedNodes[matchedNodesIndex + 1]) {
+          matchedNodes[matchedNodesIndex + 1].classList.remove("highlight");
+        }
+      }
+      matchedNodes[matchedNodesIndex].classList.add("highlight");
     }
   };
 
@@ -94,9 +115,9 @@ export default class PDFViewer extends Component<
       <div className="pdf-bg pdf-viewer" ref={this.container}>
         {this.loadPages().map(page => page)}
         <SearchUI
-          found={23}
-          onNext={e => console.log(e)}
-          onPrev={e => console.log(e)}
+          found={this.state.matchedNodes.length}
+          onNext={e => this.scrollToMatchedIndex(e - 1, "next")}
+          onPrev={e => this.scrollToMatchedIndex(e - 1, "prev")}
         ></SearchUI>
       </div>
     );
@@ -112,4 +133,5 @@ interface PDFViewerState {
   pages: number;
   scale: number;
   highlightedIndex: number;
+  matchedNodes: HTMLCollection | [];
 }
