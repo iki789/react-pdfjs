@@ -48,6 +48,10 @@
   transform-origin: 0% 0%;
 }
 
+.pdf-viewer-paper-container .text-layer mark.highlight {
+  background: rgba(255, 100, 0, 0.4);
+}
+
 .pdf-viewer-paper-container .paper-canvas {
   border-radius: 0px;
 }
