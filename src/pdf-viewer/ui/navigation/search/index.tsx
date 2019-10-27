@@ -11,6 +11,13 @@ export default class Search extends React.Component<SearchProps, SearchState> {
 
   componentDidMount() {
     this.setState({ found: this.props.found });
+    console.log(this.props.found);
+  }
+
+  componentDidUpdate(prevProps: SearchProps, prevState: SearchState) {
+    if (this.props.found != prevProps.found) {
+      this.setState({ found: this.props.found });
+    }
   }
 
   onNext = () => {
@@ -21,7 +28,7 @@ export default class Search extends React.Component<SearchProps, SearchState> {
 
   onPrev = () => {
     this.setState({ current: this.state.current - 1 }, () => {
-      this.props.onNext(this.state.current);
+      this.props.onPrev(this.state.current);
     });
   };
 
