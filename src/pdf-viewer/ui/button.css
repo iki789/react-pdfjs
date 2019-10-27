@@ -1,0 +1,14 @@
+.pdf-viewer .btn {
+  font-size: 1.5rem;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  border: 0px;
+  background-color: #e3e6e8;
+  transition: 0.2s ease-in;
+}
+
+.pdf-viewer .btn:hover {
+  cursor: pointer;
+  background-color: #d6d6d7;
+}
