@@ -2,6 +2,7 @@ import React, { Component, RefObject } from "react";
 import "./pdf-viewer.css";
 import Paper from "./paper/paper";
 import mark from "mark.js";
+import SearchUI from "./ui/navigation/search";
 const pdfjs = require("pdfjs-dist");
 const pdfjsWorker = require("pdfjs-dist/build/pdf.worker.entry");
 
@@ -90,8 +91,13 @@ export default class PDFViewer extends Component<
 
   render() {
     return (
-      <div className="pdf-bg" ref={this.container}>
+      <div className="pdf-bg pdf-viewer" ref={this.container}>
         {this.loadPages().map(page => page)}
+        <SearchUI
+          found={23}
+          onNext={e => console.log(e)}
+          onPrev={e => console.log(e)}
+        ></SearchUI>
       </div>
     );
   }
