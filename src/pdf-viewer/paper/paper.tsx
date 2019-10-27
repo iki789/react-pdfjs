@@ -28,11 +28,12 @@ export default class Paper extends Component<PaperProps, PaperState> {
     const page = await pdf.getPage(this.props.page);
     let viewport = page.getViewport({ scale: this.props.scale });
     if (this.container.current) {
-      this.setState({
-        scale:
-          (this.container.current.clientWidth / viewport.width) *
-          (this.props.scale / 1.9)
-      });
+      const clientWidth =
+        this.container.current.clientWidth < 500
+          ? 650
+          : this.container.current.clientWidth;
+      const scale = (clientWidth / viewport.width) * (this.props.scale / 1.9);
+      this.setState({ scale });
       viewport = page.getViewport({
         scale: this.state.scale
       });
