@@ -7,16 +7,22 @@ const pdfjsWorker = require("pdfjs-dist/build/pdf.worker.entry");
 
 pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorker;
 
-export default class PDFViewer extends Component<PDFViewerProps> {
+export default class PDFViewer extends Component<
+  PDFViewerProps,
+  PDFViewerState
+> {
   canvasRef: RefObject<HTMLCanvasElement> = React.createRef();
   src: string = this.props.src;
   pages: number = 1;
   container: RefObject<HTMLDivElement> = React.createRef();
-  keyWords: string = "Logitech";
+  keywords: string = this.props.keywords;
   PDFdocumentRef: any;
   fullyRenderedPages: number = 0;
+  matchedNodes: HTMLCollection | [] = [];
   state = {
-    scale: 1
+    scale: 1,
+    pages: 0,
+    highlightedIndex: 0
   };
 
   fetchPdf = async () => {
@@ -30,7 +36,8 @@ export default class PDFViewer extends Component<PDFViewerProps> {
         () => {
           this.fullyRenderedPages = this.fullyRenderedPages + 1;
           if (this.fullyRenderedPages === numPages) {
-            this.markKeywords(this.keyWords);
+            this.markKeywords(this.keywords);
+            this.getMatchedNodes();
           }
         },
         true
@@ -63,6 +70,24 @@ export default class PDFViewer extends Component<PDFViewerProps> {
     }
   };
 
+  getMatchedNodes = () => {
+    if (this.container.current) {
+      this.matchedNodes = this.container.current.getElementsByTagName("mark");
+      this.setState({ highlightedIndex: 0 });
+      this.scrollToMatchedIndex(this.state.highlightedIndex);
+    }
+  };
+
+  scrollToMatchedIndex = (matchedNodesIndex: number) => {
+    if (this.matchedNodes) {
+      const node = this.matchedNodes[matchedNodesIndex];
+      const offsetTop = 50;
+      const position = node.getBoundingClientRect().top - offsetTop;
+      node.classList.add("highlight");
+      window.scrollTo({ top: position, left: 0 });
+    }
+  };
+
   render() {
     return (
       <div className="pdf-bg" ref={this.container}>
@@ -74,4 +99,11 @@ export default class PDFViewer extends Component<PDFViewerProps> {
 
 interface PDFViewerProps {
   src: string;
+  keywords: string;
+}
+
+interface PDFViewerState {
+  pages: number;
+  scale: number;
+  highlightedIndex: number;
 }
