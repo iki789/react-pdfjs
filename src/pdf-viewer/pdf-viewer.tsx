@@ -36,19 +36,18 @@ export default class PDFViewer extends Component<
       const { numPages } = await this.PDFdocumentRef;
       this.pages = numPages;
       this.setState({ pages: numPages });
-      document.addEventListener(
-        "textlayerrendered",
-        () => {
-          this.fullyRenderedPages = this.fullyRenderedPages + 1;
-          if (this.fullyRenderedPages === numPages) {
-            this.markKeywords(this.keywords);
-            this.getMatchedNodes();
-          }
-        },
-        true
-      );
+      this.onPageRendered();
     }
     return this.PDFdocumentRef;
+  };
+
+  onPageRendered = () => {
+    const { pages } = this.state;
+    this.fullyRenderedPages = this.fullyRenderedPages + 1;
+    if (this.fullyRenderedPages === pages) {
+      this.markKeywords(this.keywords);
+      this.getMatchedNodes();
+    }
   };
 
   loadPages = () => {
@@ -60,6 +59,7 @@ export default class PDFViewer extends Component<
           documentLoadRef={this.fetchPdf()}
           page={i}
           scale={this.state.scale}
+          onPageRendered={this.onPageRendered}
         ></Paper>
       );
     }
@@ -92,22 +92,29 @@ export default class PDFViewer extends Component<
     const { matchedNodes } = this.state;
     if (this.state.matchedNodes[matchedNodesIndex]) {
       const node: Element = matchedNodes[matchedNodesIndex];
-      const offsetTop = 50;
-      const position = node.getBoundingClientRect().top - offsetTop;
-      window.scrollTo({ top: position, left: 0 });
-      node.classList.add("highlight");
-      if (action === "next") {
-        if (matchedNodes[matchedNodesIndex - 1]) {
-          matchedNodes[matchedNodesIndex - 1].classList.remove("highlight");
-        }
-      }
-      if (action === "prev") {
-        if (matchedNodes[matchedNodesIndex + 1]) {
-          matchedNodes[matchedNodesIndex + 1].classList.remove("highlight");
-        }
-      }
-      matchedNodes[matchedNodesIndex].classList.add("highlight");
+      const elementRect = node.getBoundingClientRect();
+      const absoluteElementTop = elementRect.top + window.pageYOffset;
+      const middle = absoluteElementTop - window.innerHeight / 2;
+      window.scrollTo(0, middle);
+      this.highlightNode(matchedNodesIndex, action);
     }
+  };
+
+  highlightNode = (nodeIndex: number, action: "next" | "prev") => {
+    const { matchedNodes } = this.state;
+    const node = matchedNodes[nodeIndex];
+    node.classList.add("highlight");
+    if (action === "next") {
+      if (matchedNodes[nodeIndex - 1]) {
+        matchedNodes[nodeIndex - 1].classList.remove("highlight");
+      }
+    }
+    if (action === "prev") {
+      if (matchedNodes[nodeIndex + 1]) {
+        matchedNodes[nodeIndex + 1].classList.remove("highlight");
+      }
+    }
+    matchedNodes[nodeIndex].classList.add("highlight");
   };
 
   render() {
@@ -125,7 +132,7 @@ export default class PDFViewer extends Component<
 }
 
 interface PDFViewerProps {
-  src: string;
+  src: any;
   keywords: string;
 }
 
