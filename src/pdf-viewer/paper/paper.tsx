@@ -71,7 +71,7 @@ export default class Paper extends Component<PaperProps, PaperState> {
         });
 
         textRender.promise.then(() => {
-          document.dispatchEvent(new CustomEvent("textlayerrendered"));
+          this.props.onPageRendered();
         });
       }
     }
@@ -102,6 +102,7 @@ interface PaperProps {
   page: number;
   documentLoadRef: any;
   scale: number;
+  onPageRendered: () => void;
 }
 
 interface PaperState {
