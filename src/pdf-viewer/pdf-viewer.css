@@ -1,3 +1,7 @@
+html {
+  scroll-behavior: smooth;
+}
+
 .pdf-bg {
   padding: 2rem 0;
   background-color: #3d3d3d;
