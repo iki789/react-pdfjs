@@ -1,17 +1,31 @@
 .pdf-viewer .btn {
-  font-size: 1.5rem;
   border: 0px;
-  background-color: #e3e6e8;
+  background-color: #fff;
   transition: 0.2s ease-in;
+  border-radius: 0.25rem;
+  padding: 0.25rem 1rem;
+  font-size: 1.2rem;
+  border: 1px solid #d3d3d3d3;
 }
 
-.pdf-viewer .btn:hover {
+.pdf-viewer .btn:hover,
+.pdf-viewer .btn:active,
+.pdf-viewer .btn:hover .btn:active,
+.pdf-viewer .btn:active .btn:hover {
   cursor: pointer;
-  background-color: #d6d6d7;
+  background-color: #ececec;
+}
+
+.pdf-viewer .btn:disabled {
+  background: #dddddd;
 }
 
 .pdf-viewer .btn-icon {
   border-radius: 50%;
   width: 36px;
   height: 36px;
+  font-size: 1.5rem;
+  padding: 0;
+  line-height: 1rem;
+  vertical-align: middle;
 }
