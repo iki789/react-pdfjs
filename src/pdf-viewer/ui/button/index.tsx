@@ -1,7 +1,9 @@
 import React from "react";
 import "./button.css";
 
-const Button: React.SFC<ButtonProps> = props => {
+const Button: React.SFC<
+  ButtonProps & React.ButtonHTMLAttributes<any>
+> = props => {
   const classes: string[] = ["btn"];
   if (props.icon) {
     classes.push("btn-icon");
